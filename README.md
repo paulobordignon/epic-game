@@ -1,15 +1,19 @@
-# Basic Sample Hardhat Project
+# About the project
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+To initialize a new contract I runed:
 
-Try running some of the following tasks:
+`mkdir epic-game`
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
+`cd epic-game`
+
+`npm init -y`
+
+`npm install --save-dev hardhat@2.9.9`
+
+`npx hardhat`
+
+and added a new basic project;
+
+To make a contract deploy on local network I runed:
+
+`npx hardhat run scripts/sample-script.js`
