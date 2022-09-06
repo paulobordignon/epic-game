@@ -7,9 +7,8 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 // Funcoes de ajuda que o OpenZeppelin providencia.
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-
-
 import "hardhat/console.sol";
+import "./libraries/Base64.sol";
 
 // Nosso contrato herda do ERC721, que eh o contrato padrao de
 // NFT!
@@ -71,6 +70,33 @@ contract MyEpicGame is ERC721 {
     // Eu incrementei tokenIds aqui para que minha primeira NFT tenha o ID 1.
     // Mais nisso na aula!
     _tokenIds.increment();
+  }
+
+  function tokenURI(uint256 _tokenId) public view override returns (string memory) {
+    CharacterAttributes memory charAttributes = nftHolderAttributes[_tokenId];
+
+    string memory strHp = Strings.toString(charAttributes.hp);
+    string memory strMaxHp = Strings.toString(charAttributes.maxHp);
+    string memory strAttackDamage = Strings.toString(charAttributes.attackDamage);
+
+    string memory json = Base64.encode(
+      abi.encodePacked(
+        '{"name": "',
+        charAttributes.name,
+        ' -- NFT #: ',
+        Strings.toString(_tokenId),
+        '", "description": "Esta NFT da acesso ao meu jogo NFT!", "image": "',
+        charAttributes.imageURI,
+        '", "attributes": [ { "trait_type": "Health Points", "value": ',strHp,', "max_value":',strMaxHp,'}, { "trait_type": "Attack Damage", "value": ',
+        strAttackDamage,'} ]}'
+      )
+    );
+
+    string memory output = string(
+      abi.encodePacked("data:application/json;base64,", json)
+    );
+
+    return output;
   }
 
   // Usuarios vao poder usar essa funcao e pegar a NFT baseado no personagem que mandarem!
