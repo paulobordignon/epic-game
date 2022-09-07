@@ -8,15 +8,23 @@ const main = async () => {
               "https://i.imgur.com/GbWU1wR.png",
           ],
       [10, 70, 90], // HP values
-      [15, 90, 80] // Attack damage values
+      [15, 90, 80], // Attack damage values
+      "Laziness",
+		  "https://i.imgur.com/nSGZ0y1.jpeg",
+		  200,
+		  40
     );
     await gameContract.deployed();
     console.log("Contrato implantado no endereço:", gameContract.address);
 
     let txn;
-    // Só temos três personagens.
-    // Uma NFT com personagem no index 2 da nossa array.
     txn = await gameContract.mintCharacterNFT(2);
+    await txn.wait();
+
+    txn = await gameContract.attackBoss();
+    await txn.wait();
+
+    txn = await gameContract.attackBoss();
     await txn.wait();
 
     // Pega o valor da URI da NFT

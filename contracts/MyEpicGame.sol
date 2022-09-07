@@ -34,6 +34,16 @@ contract MyEpicGame is ERC721 {
   // Criamos um mapping do tokenId => atributos das NFTs.
   mapping(uint256 => CharacterAttributes) public nftHolderAttributes;
 
+  struct BigBoss {
+    string name;
+    string imageURI;
+    uint hp;
+    uint maxHp;
+    uint attackDamage;
+  }
+
+  BigBoss public bigBoss;
+
   // Um mapping de um endereco => tokenId das NFTs, nos da um
   // jeito facil de armazenar o dono da NFT e referenciar ele
   // depois.
@@ -43,13 +53,28 @@ contract MyEpicGame is ERC721 {
     string[] memory characterNames,
     string[] memory characterImageURIs,
     uint[] memory characterHp,
-    uint[] memory characterAttackDmg
+    uint[] memory characterAttackDmg,
+    string memory bossName, // Essas novas variáveis serão passadas via run.js ou deploy.js
+    string memory bossImageURI,
+    uint bossHp,
+    uint bossAttackDamage
     // Embaixo, voce tambem pode ver que adicionei um simbolo especial para identificar nossas NFTs
     // Esse eh o nome e o simbolo do nosso token, ex Ethereum ETH.
     // Eu chamei o meu de Heroes e HERO. Lembre-se, um NFT eh soh um token!
   )
     ERC721("Heroes", "HERO")
   {
+    // Inicializa o boss. Salva na nossa variável global de estado "bigBoss".
+    bigBoss = BigBoss({
+      name: bossName,
+      imageURI: bossImageURI,
+      hp: bossHp,
+      maxHp: bossHp,
+      attackDamage: bossAttackDamage
+    });
+
+    console.log("Boss inicializado com sucesso %s com HP %s, img %s", bigBoss.name, bigBoss.hp, bigBoss.imageURI);
+
     for(uint i = 0; i < characterNames.length; i += 1) {
       defaultCharacters.push(CharacterAttributes({
         characterIndex: i,
@@ -97,6 +122,44 @@ contract MyEpicGame is ERC721 {
     );
 
     return output;
+  }
+
+  function attackBoss() public {
+    // Pega o estado da NFT do jogador.
+    uint256 nftTokenIdOfPlayer = nftHolders[msg.sender];
+    CharacterAttributes storage player = nftHolderAttributes[nftTokenIdOfPlayer];
+
+    console.log("\nJogador com personagem %s ira atacar. Tem %s de HP e %s de PA", player.name, player.hp, player.attackDamage);
+    console.log("Boss %s tem %s de HP e %s de PA", bigBoss.name, bigBoss.hp, bigBoss.attackDamage);
+
+    // Checa se o hp do jogador é maior que 0.
+    require (
+      player.hp > 0,
+      "Erro: personagem deve ter HP para atacar o boss."
+    );
+
+    // Checa que o hp do boss é maior que 0.
+    require (
+      bigBoss.hp > 0,
+      "Erro: Boss deve ter HP para ser atacado."
+    );
+
+    // Permite que o jogador ataque o boss.
+    if (bigBoss.hp < player.attackDamage) {
+      bigBoss.hp = 0;
+    } else {
+      bigBoss.hp = bigBoss.hp - player.attackDamage;
+    }
+
+  // Permite que o boss ataque o jogador.
+    if (player.hp < bigBoss.attackDamage) {
+      player.hp = 0;
+    } else {
+      player.hp = player.hp - bigBoss.attackDamage;
+    }
+
+    console.log("Jogador atacou o boss. Boss ficou com HP: %s", bigBoss.hp);
+    console.log("Boss atacou o jogador. Jogador ficou com hp: %s\n", player.hp);
   }
 
   // Usuarios vao poder usar essa funcao e pegar a NFT baseado no personagem que mandarem!
