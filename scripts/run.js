@@ -3,14 +3,14 @@ const main = async () => {
     const gameContract = await gameContractFactory.deploy(
       ["Homer", "Static Shock", "Choji"],
           [
-              "https://i.imgur.com/y9dH2bJ.jpeg",
-              "https://i.imgur.com/bpJzFOM.png",
-              "https://i.imgur.com/GbWU1wR.png",
+            "QmZk64ZpHdLrMkcKU23Vz7TgVY86U6Mz4KVmVSUEg8dM22",
+            "QmZkzBygUQTkYnD5sVn3edtRrY2xfdf3RAKsaG7DrGH1Rd",
+            "Qmf75nh245s5peYxnpRiZN6Hoh8SFf6k62hCUNwgbQmy5X",
           ],
       [10, 70, 90], // HP values
       [15, 90, 80], // Attack damage values
       "Laziness",
-		  "https://i.imgur.com/nSGZ0y1.jpeg",
+		  "QmUHx5PTGVyeGHJ8ruLQsVYqYJY6b2ru9Lv1oPwjWAdJU9",
 		  200,
 		  40
     );

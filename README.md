@@ -18,7 +18,12 @@ To make a contract deploy on local network I runed:
 
 `npx hardhat run scripts/sample-script.js`
 
-To make the deploy on Goerli, first create a account on Alchemy and create a new project, then fill the project key on .env also fill your wallet private key.
+To make the deploy on Goerli, first create a account on Alchemy and create a new project, then fill the project key on .env also fill your wallet private key and after:
 
-Run: npx hardhat run scripts/deploy.js --network goerli
+`npx hardhat run scripts/deploy.js --network goerli`
 
+Then Fill out in constants.js the contract address.
+
+Ps: The project images was uploaded on pinata that is a ipfs provider.
+
+This project is a web3dev bootcamp
